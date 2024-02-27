@@ -9,6 +9,7 @@ fieldset{
 
 .grid{
     display: grid;
+    height: 100vh;
 }
 
 .grid-col-2{
