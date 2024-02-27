@@ -1,5 +1,4 @@
 import type { MetaFunction } from "@remix-run/node";
-import Sidebar from "~/components/sidebar";
 import { redirect } from "@remix-run/node";
 import { v4 } from "uuid";
 
@@ -17,12 +16,12 @@ export function loader() {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-        <Sidebar />
+        <h1>Remix Chat</h1>
     </div>
   );
 }
 
-export const action = ({request}) => {
+/* export const action = ({request}) => {
   const uiid = v4();
   return redirect("/chat/" + uiid);
-}
+} */

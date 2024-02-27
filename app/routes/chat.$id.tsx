@@ -7,16 +7,24 @@ export const loader = async ({ params, request }) => {
         return redirect("/");
     }
     const id = params.id;
-    const [rows] = await con.execute("SELECT * FROM chats WHERE id = ?", [id]);
+    /* const [rows, fields] = await con.query("SELECT * FROM chats WHERE id = ?", [id]);
+
+    console.log(rows, id);
+
     if (rows.length === 0) {
-        const [result] = await con.execute("INSERT INTO chats (id) VALUES (?)", [id]);
-    }
+        const [result] = await con.query("INSERT INTO chats (id) VALUES (?)", [id]);
+
+        if (result.affectedRows === 0) {
+            return redirect("/");
+        }
+    } */
 
     return { date: new Date(), id: params?.id};
 }
 
 export default function Chat() {
     const data = useLoaderData();
+
     return (
         <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
             <h1>Remix Chat</h1>

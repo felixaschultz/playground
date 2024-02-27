@@ -6,7 +6,7 @@ export default function Sidebar() {
     return (
         <div style={{ width: "200px", height: "100%", backgroundColor: "#f0f0f0", padding: "20px" }}>
             <h3>Remix Chat</h3>
-            <Form method="POST">
+            <Form method="post">
                 <button type="submit">
                     New
                 </button>
