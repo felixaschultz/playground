@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import { EventEmitter } from "events";
 
 const con = mysql.createPool({
     host: process.env.MYSQL_HOST,
@@ -7,4 +8,6 @@ const con = mysql.createPool({
     database: process.env.MYSQL_DB
 });
 
-export default con;
+const eventEmitter = new EventEmitter();
+
+export { con, eventEmitter };
