@@ -3,6 +3,10 @@ body{
     padding: 0;
 }
 
+fieldset{
+    border: none;
+}
+
 .grid{
     display: grid;
 }

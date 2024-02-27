@@ -7,6 +7,13 @@ import con from "~/db/database";
 
 import "../Styles/chat.css";
 
+export const meta = () => {
+    return [
+        { title: "Chat" },
+        { name: "description", content: "Welcome to Remix!" },
+    ];
+}
+
 export const loader = async ({ params, request }) => {
     if (!params?.id) {
         return redirect("/");
@@ -56,8 +63,10 @@ export default function Chat() {
             <footer>
                 <fetcher.Form method="post">
                     <fieldset disabled={fetcher.state === "submitting" ? true : false}>
-                        <input ref={textRef} type="text" name="message" placeholder="Type a message" />
-                        <button type="submit">Send</button>
+                        <section className="chatContainer">
+                            <input className="chat-input" ref={textRef} type="text" name="message" placeholder="Type a message" />
+                            <button className="" type="submit">Send</button>
+                        </section>
                     </fieldset>
                 </fetcher.Form>
             </footer>
