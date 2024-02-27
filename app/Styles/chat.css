@@ -1,8 +1,17 @@
+.chat-header{
+    background-color: #f1f0f0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
 .bubble{
     background-color: #f1f0f0;
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
+    display: block;
     max-width: max-content;
     word-wrap: break-word;
 }
@@ -10,4 +19,8 @@
 .bubble.right{
     background-color: #dcf8c6;
     margin-left: auto;
+}
+
+.mt-small{
+    margin: 2px 10px;
 }
