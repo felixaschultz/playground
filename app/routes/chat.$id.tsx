@@ -33,11 +33,6 @@ export const loader = async ({ params, request }) => {
         message.you = message.user === signedInUser;
     });
 
-    eventEmitter.on("message", async (message) => {
-        const [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [message.chat_id]);
-    });
-    eventEmitter.emit("message", { chat_id: id });
-
     const chatUser = chat.find(element => element.user !== signedInUser)?.user;
 
     return { user: chatUser, chat: chat };
@@ -48,12 +43,18 @@ export default function Chat() {
     
     const fetcher = useFetcher();
     let textRef = useRef();
+    let chatRef = useRef();
 
     useEffect(() => {
         if (fetcher.state === "submitting" && textRef.current) {
             textRef.current.value = "";
             textRef.current.focus();
         }
+
+        if(fetcher.state === "done" && chatRef.current){
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+
     }, [fetcher.state])
 
     return (
@@ -61,7 +62,7 @@ export default function Chat() {
             <header className="chat-header">
                 <h1>{ user }</h1>
             </header>
-            <section className="messages-container">
+            <section ref={chatRef} className="messages-container">
                 {chat.map((message, i) => {
                     // Calculate the difference in seconds between the current message's date and the previous message's date
                     const secondsDiff = i > 0 ? moment(message.date).diff(moment(chat[i - 1].date), 'seconds') : 0;

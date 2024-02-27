@@ -14,12 +14,14 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import Sidebar from "~/components/sidebar";
+import { getSession } from "~/services/session";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader = async () => {
+export const loader = async ({request}) => {
+  const user = await getSession(request.headers.get("cookie"));
   const [chat] = await con.query(`SELECT m.*
   FROM messages m
   INNER JOIN (
@@ -34,7 +36,7 @@ export const loader = async () => {
 }
 
 export default function App() {
-  const { chat } = useLoaderData();
+  const { chat, user } = useLoaderData();
   return (
     <html lang="en">
       <head>
