@@ -1,6 +1,7 @@
 import { redirect } from "@remix-run/react";
 import { useLoaderData, useFetcher, Form } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { getSession } from "~/services/session";
 
 import moment from "moment";
 import con from "~/db/database";
@@ -15,12 +16,13 @@ export const meta = () => {
 }
 
 export const loader = async ({ params, request }) => {
+    const session = await getSession(request.headers.get("cookie"));
+    const user = session.data.username;
     if (!params?.id) {
         return redirect("/");
     }
     const id = params.id;
 
-    const user = "Felix";
     const [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
     chat.forEach((message) => {
         message.you = message.user === user;
@@ -74,10 +76,17 @@ export default function Chat() {
 }
 
 export const action = async ({ params, request }) => {
+    const session = await getSession(request.headers.get("cookie"));
+
+    if(!session.data.login){
+        return redirect("/login");
+    }
+
     const data = await request.formData();
     const message = data.get("message");
+    const username = session.data.username;
     if (!message) {
         return redirect("/chat/" + params.id);
     }
-    return await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, "Felix", message, new Date()]);
+    return await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, username, message, new Date()]);
 }
