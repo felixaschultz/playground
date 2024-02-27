@@ -27,6 +27,19 @@
     padding-top: 10px;
 }
 
+.chatContainer-grid{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+    height: 100vh;
+}
+
+.messages-container{
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+}
+
 .chat-input{
     width: 100%;
     padding: 10px;

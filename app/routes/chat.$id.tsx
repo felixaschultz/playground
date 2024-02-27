@@ -1,10 +1,9 @@
-import { redirect } from "@remix-run/react";
-import { useLoaderData, useFetcher, Form } from "@remix-run/react";
+import { useLoaderData, useFetcher, Form, redirect } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { getSession } from "~/services/session";
 
 import moment from "moment";
-import con from "~/db/database";
+import { con, eventEmitter } from "~/db/database";
 
 import "../Styles/chat.css";
 
@@ -28,18 +27,25 @@ export const loader = async ({ params, request }) => {
     }
     const id = params.id;
 
-    const [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
+    let [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
+
     chat.forEach((message) => {
         message.you = message.user === signedInUser;
     });
 
-    const chatUser = chat.find(element => element.user !== signedInUser)?.user;;
+    eventEmitter.on("message", async (message) => {
+        const [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [message.chat_id]);
+    });
+    eventEmitter.emit("message", { chat_id: id });
+
+    const chatUser = chat.find(element => element.user !== signedInUser)?.user;
 
     return { user: chatUser, chat: chat };
 }
 
 export default function Chat() {
     const {user, chat} = useLoaderData();
+    
     const fetcher = useFetcher();
     let textRef = useRef();
 
@@ -51,11 +57,11 @@ export default function Chat() {
     }, [fetcher.state])
 
     return (
-        <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+        <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
             <header className="chat-header">
                 <h1>{ user }</h1>
             </header>
-            <section>
+            <section className="messages-container">
                 {chat.map((message, i) => {
                     // Calculate the difference in seconds between the current message's date and the previous message's date
                     const secondsDiff = i > 0 ? moment(message.date).diff(moment(chat[i - 1].date), 'seconds') : 0;
