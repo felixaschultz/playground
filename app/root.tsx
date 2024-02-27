@@ -3,7 +3,7 @@ import type { LinksFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import "./Styles/global.css";
-import con from "~/db/database";
+import {con} from "~/db/database";
 import { v4 } from "uuid";
 import {
   Links,
@@ -29,8 +29,6 @@ export const loader = async () => {
   ) group_m ON m.chat_id = group_m.chat_id AND m.date = group_m.max_date
   ORDER BY date DESC
   LIMIT 10`);
-
-  console.log(chat);
 
   return { chat };
 }
