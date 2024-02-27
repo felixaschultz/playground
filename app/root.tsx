@@ -27,7 +27,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div className="grid grid-col-min-2 gap-1">
+        <div className="grid grid-col-min-2">
           <header>
             <Sidebar />
           </header>
