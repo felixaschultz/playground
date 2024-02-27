@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Link } from "react-router-dom";
+import Sidebar from "~/components/sidebar";
 import { redirect } from "@remix-run/node";
+import { v4 } from "uuid";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,8 +17,12 @@ export function loader() {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Remix Chat</h1> 
-      <Link to="/chat">Open chat</Link>
+        <Sidebar />
     </div>
   );
+}
+
+export const action = ({request}) => {
+  const uiid = v4();
+  return redirect("/chat/" + uiid);
 }
