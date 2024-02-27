@@ -7,7 +7,6 @@ const con = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DB
 });
-
 const eventEmitter = new EventEmitter();
 
-export { con, eventEmitter };
+export { con, eventEmitter};
