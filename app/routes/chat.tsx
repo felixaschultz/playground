@@ -1,0 +1,16 @@
+import mongodb from "mongodb";
+import { useLoaderData } from "@remix-run/react";
+
+export function loader() {
+  return { date: new Date() };
+}
+
+export default function Chat() {
+    const data = useLoaderData();
+    return (
+        <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
+        <h1>Remix Chat</h1>
+        <p>Chat coming soon!</p>
+        </div>
+    );
+}
