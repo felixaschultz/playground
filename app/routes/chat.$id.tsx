@@ -82,10 +82,16 @@ export default function Chat() {
                     const secondsDiff = i > 0 ? moment(message.date).diff(moment(chat[i - 1].date), 'seconds') : 0;
                     const you = (message.you) ? " right" : "";
                     const lessThan60Seconds = (secondsDiff <= 60) ? " mt-small " : "";
-
+                    
                     return (
-                        <div key={i} className={"bubble" + you}>
-                            {message.message}
+                        <div key={i} style={(message.message.indexOf("iframe") > -1) ? {padding: 0, overflow:"hidden", aspectRatio: "16/9"} : {}} className={"bubble" + you} >
+                            {
+                                (message.message.indexOf("iframe") > -1 || message.message.indexOf("<a href=") > -1) ? (
+                                    <div dangerouslySetInnerHTML={{ __html: message.message }} />
+                                ) : (
+                                    message.message
+                                )
+                            }
                         </div>
                     )
                 })}
