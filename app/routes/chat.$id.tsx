@@ -65,7 +65,6 @@ export default function Chat() {
                     <fieldset disabled={fetcher.state === "submitting" ? true : false}>
                         <section className="chatContainer">
                             <input className="chat-input" ref={textRef} type="text" name="message" placeholder="Type a message" />
-                            <button className="" type="submit">Send</button>
                         </section>
                     </fieldset>
                 </fetcher.Form>
