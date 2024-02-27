@@ -17,7 +17,7 @@ export const meta = () => {
 
 export const loader = async ({ params, request }) => {
     const session = await getSession(request.headers.get("cookie"));
-    const user = session.data.username;
+    const signedInUser = session.data.username;
 
     if(session.data.login === false){
         return redirect("/login");
@@ -30,10 +30,12 @@ export const loader = async ({ params, request }) => {
 
     const [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
     chat.forEach((message) => {
-        message.you = message.user === user;
+        message.you = message.user === signedInUser;
     });
 
-    return { user: user, chat: chat };
+    const chatUser = chat.find(element => element.user !== signedInUser)?.user;;
+
+    return { user: chatUser, chat: chat };
 }
 
 export default function Chat() {
@@ -51,7 +53,7 @@ export default function Chat() {
     return (
         <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
             <header className="chat-header">
-                <h1>{user}</h1>
+                <h1>{ user }</h1>
             </header>
             <section>
                 {chat.map((message, i) => {
