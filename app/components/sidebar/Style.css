@@ -1,0 +1,26 @@
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    margin: 0;
+}
+
+.chats a{
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.chats a:hover{
+    background-color: #bfbfbf;
+    cursor: pointer;
+}
+
+.settings{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

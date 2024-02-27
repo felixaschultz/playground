@@ -1,6 +1,7 @@
 body{
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 fieldset{
@@ -35,4 +36,15 @@ ul{
 
 .right{
     text-align: right;
+}
+
+.cta{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #00a4f0;
+    margin: 0;
+    border: none;
+    width: max-content;
 }

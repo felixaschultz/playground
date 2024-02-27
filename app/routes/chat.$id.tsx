@@ -33,6 +33,18 @@ export const loader = async ({ params, request }) => {
         return message;
     });
     chat.forEach((message) => {
+        /* Find user */
+        (message.message.match(/@(\w+)/g) || []).forEach((match) => {
+            const username = match.slice(1);
+            message.message = message.message.replace(match, `<a href="/chat/${id}/@${username}">${match}</a>`);
+        });
+
+        /* Find YouTube Videos */
+        (message.message.match(/https:\/\/www.youtube.com\/watch\?v=(\w+)/g) || []).forEach((match) => {
+            const videoId = match.split("v=")[1];
+            message.message = message.message.replace(match, `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
+        });
+
         message.you = message.user === signedInUser;
     });
 
