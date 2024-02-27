@@ -2,6 +2,7 @@ import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import "./Styles/global.css";
+import { v4 } from "uuid";
 import {
   Links,
   LiveReload,
@@ -11,7 +12,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import Sidebar from "~/components/sidebar";
-import { v4 } from "uuid";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
