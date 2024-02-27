@@ -1,0 +1,33 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.grid{
+    display: grid;
+}
+
+.grid-col-2{
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid-col-min-2{
+    grid-template-columns: min-content 1fr;
+}
+
+.gap-1{
+    gap: 1rem;
+}
+
+.gap-2{
+    gap: 2rem;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+}
+
+.right{
+    text-align: right;
+}

@@ -1,6 +1,7 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import "./Styles/global.css";
 import {
   Links,
   LiveReload,
@@ -26,10 +27,12 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <header>
-          <Sidebar />
-        </header>
-        <Outlet />
+        <div className="grid grid-col-min-2 gap-1">
+          <header>
+            <Sidebar />
+          </header>
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -40,6 +43,5 @@ export default function App() {
 
 export const action = ({request}) => {
   const uiid = v4();
-  console.log(uiid);
   return redirect("/chat/" + uiid);
 }

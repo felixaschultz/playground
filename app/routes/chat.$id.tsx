@@ -1,6 +1,7 @@
 import { redirect } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import con from "~/db/database";
+import "../Styles/chat.css";
 
 export const loader = async ({ params, request }) => {
     if (!params?.id) {
@@ -18,17 +19,36 @@ export const loader = async ({ params, request }) => {
             return redirect("/");
         }
     } */
+    const user = "Felix";
+    const chat = [
+        {
+            user: "Felix",
+            message: "Hello",
+            you: true
+        },
+        {
+            user: "John",
+            message: "Hi"
+        }
+    ]
 
-    return { date: new Date(), id: params?.id};
+    return { user: user, chat: chat };
 }
 
 export default function Chat() {
-    const data = useLoaderData();
+    const {user, chat} = useLoaderData();
 
     return (
         <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-            <h1>Remix Chat</h1>
-            <p>{data.id}</p>
+            <h1>Chat: {user}</h1>
+            <h2>Messages</h2>
+            <ul>
+                {chat.map((message, i) => (
+                    <li key={i} className={(message.you) ? "bubble right" : "bubble"}>
+                        {message.message}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
