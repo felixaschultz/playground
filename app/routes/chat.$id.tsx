@@ -18,6 +18,11 @@ export const meta = () => {
 export const loader = async ({ params, request }) => {
     const session = await getSession(request.headers.get("cookie"));
     const user = session.data.username;
+
+    if(session.data.login === false){
+        return redirect("/login");
+    }
+
     if (!params?.id) {
         return redirect("/");
     }

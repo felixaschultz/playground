@@ -1,8 +1,6 @@
-import { Link } from "@remix-run/react"
-import { Form } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
+import { Link, useLoaderData, Form } from "@remix-run/react"
 
-export default function Sidebar() {
+export default function Sidebar({ chat }) {
     return (
         <div style={{ width: "200px", height: "100%", backgroundColor: "#f0f0f0", padding: "20px" }}>
             <h3>Remix Chat</h3>
@@ -13,9 +11,16 @@ export default function Sidebar() {
             </Form>
             <ul style={{ listStyle: "none", padding: 0 }}>
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/chat/1">Chat 1</Link></li>
-                <li><Link to="/chat/2">Chat 2</Link></li>
-                <li><Link to="/chat/3">Chat 3</Link></li>
+                {
+                    chat?.map((chat, i) => {
+                        console.log(chat);
+                        return (
+                            <li key={i}>
+                                <Link to={`/chat/${chat.chat_id}`}>{chat.message}</Link>
+                            </li>
+                        );
+                    })
+                }
             </ul>
         </div>
     );

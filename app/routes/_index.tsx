@@ -1,6 +1,4 @@
 import type { MetaFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { v4 } from "uuid";
 
 export const meta: MetaFunction = () => {
   return [
