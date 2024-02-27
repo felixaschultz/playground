@@ -1,10 +1,10 @@
-import { useLoaderData, useFetcher, Form, redirect } from "@remix-run/react";
+import { useLoaderData, useFetcher, Form, redirect, useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { getSession } from "~/services/session";
 
 import moment from "moment";
-import { con, eventEmitter } from "~/db/database";
-
+import { con } from "~/db/database";
+import { eventStream, emitter } from "~/services/event.server";
 import "../Styles/chat.css";
 
 export const meta = () => {
@@ -28,19 +28,21 @@ export const loader = async ({ params, request }) => {
     const id = params.id;
 
     let [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
-
+    chat = chat.map((message) => {
+        message.date = moment(message.date).format("YYYY-MM-DD HH:mm:ss");
+        return message;
+    });
     chat.forEach((message) => {
         message.you = message.user === signedInUser;
     });
 
     const chatUser = chat.find(element => element.user !== signedInUser)?.user;
-
-    return { user: chatUser, chat: chat };
+    return { chat, chatUser };
 }
 
 export default function Chat() {
-    const {user, chat} = useLoaderData();
-    
+    const {chat, user} = useLoaderData();
+
     const fetcher = useFetcher();
     let textRef = useRef();
     let chatRef = useRef();
@@ -55,7 +57,7 @@ export default function Chat() {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
 
-    }, [fetcher.state])
+    }, [fetcher.state]);
 
     return (
         <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
@@ -102,5 +104,10 @@ export const action = async ({ params, request }) => {
     if (!message) {
         return redirect("/chat/" + params.id);
     }
+
     return await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, username, message, new Date()]);
+
+    /* if(newMessage){
+        return eventEmitter.emit("after_message_insert", { chat_id: params.id, user: username, message: message, date: new Date() });
+    } */
 }

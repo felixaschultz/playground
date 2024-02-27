@@ -15,7 +15,6 @@ export default function Sidebar({ chat }) {
                 <li><Link to="/">Home</Link></li>
                 {
                     chat?.map((chat, i) => {
-                        console.log(chat);
                         return (
                             <li key={i}>
                                 <Link to={`/chat/${chat.chat_id}`}>
