@@ -1,8 +1,11 @@
-import mongodb from "mongodb";
 import { useLoaderData } from "@remix-run/react";
+import { con } from "../db/database";
+import { redirect } from "@remix-run/node";
 
-export function loader() {
-  return { date: new Date() };
+export async function loader({ request }) {
+    if(!request.params?.id) return redirect("/");
+    const message = await con.execute("SELECT * FROM messages WHERE id = ?", [request.params?.id]);
+    return { date: new Date() };
 }
 
 export default function Chat() {
