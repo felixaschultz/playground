@@ -1,11 +1,11 @@
 import { EventEmitter } from "events";
-export let emitter = new EventEmitter();
+const emitter = new EventEmitter();
 
 type InitFunction = (send: SendFunction) => CleanupFunction;
 type SendFunction = (event: string, data: string) => void;
 type CleanupFunction = () => void;
 
-export function eventStream(request: Request, init: InitFunction) {
+function eventStream(request: Request, init: InitFunction) {
   let stream = new ReadableStream({
     start(controller) {
       let encoder = new TextEncoder();
@@ -36,3 +36,5 @@ export function eventStream(request: Request, init: InitFunction) {
     headers: { "Content-Type": "text/event-stream" },
   });
 }
+
+export { eventStream, emitter}

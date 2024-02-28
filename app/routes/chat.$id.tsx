@@ -79,7 +79,7 @@ export default function Chat() {
 
     }, [fetcher.state]);
 
-    /* useEffect(() => {
+    useEffect(() => {
         const handleNewMessage = (data) => {
             console.log(data);
             revalidator.revalidate();
@@ -93,7 +93,7 @@ export default function Chat() {
         }else{
             console.log("No emitter");
         }
-    }, []);  */// Empty dependency array
+    }, []); // Empty dependency array
 
     return (
         <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
