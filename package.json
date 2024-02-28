@@ -6,6 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual",
+    "socket": "node server/index.js",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
@@ -16,6 +17,7 @@
     "@remix-run/react": "^2.7.2",
     "@remix-run/serve": "^2.7.2",
     "bcryptjs": "^2.4.3",
+    "http": "0.0.1-security",
     "isbot": "^4.1.0",
     "moment": "^2.30.1",
     "mysql": "^2.18.1",
@@ -23,6 +25,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-utils": "^7.5.0",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

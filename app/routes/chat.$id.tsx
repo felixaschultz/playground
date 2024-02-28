@@ -8,6 +8,9 @@ import { con } from "~/db/database";
 import { eventStream, emitter } from "~/services/event.server";
 import MessageContainer from "~/components/MessageContainer";
 import "../Styles/chat.css";
+import io from 'socket.io-client';
+
+const socket = io('https://www.felix-schultz.dk/socket.php');
 
 export const meta = () => {
     return [
@@ -57,12 +60,25 @@ export const loader = async ({ params, request }) => {
     });
 
     const chatUser = chat.find(element => element.user !== signedInUser).user;
+
+    socket.on('connection', (socket) => {
+        console.log(`⚡: ${socket.id} user just connected!`);
+      
+        //Listens and logs the message to the console
+        socket.on('message', (data) => {
+          console.log(data);
+        });
+      
+        socket.on('disconnect', () => {
+          console.log('🔥: A user disconnected');
+        });
+    });
+
     return { chat,  chatUser };
 }
 
 export default function Chat() {
     const {chat, user} = useLoaderData();
-    const revalidator = useRevalidator();
 
     const fetcher = useFetcher();
     let textRef = useRef();
@@ -71,7 +87,7 @@ export default function Chat() {
     useEffect(() => {
         if (fetcher.state === "submitting" && textRef.current) {
             textRef.current.value = "";
-            textRef.current.focus();
+
         }
 
         if(fetcher.state === "done" && chatRef.current){
@@ -79,20 +95,6 @@ export default function Chat() {
         }
 
     }, [fetcher.state]);
-
-    useEffect(() => {
-        const handleNewMessage = (data) => {
-            console.log(data);
-            revalidator.revalidate();
-        };
-    
-        if( emitter ){
-            emitter.on("after_message_insert", handleNewMessage);
-            return () => {
-                emitter.off("after_message_insert", handleNewMessage);
-            }
-        }
-    }, []); // Empty dependency array
 
     return (
         <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
@@ -127,6 +129,7 @@ export const action = async ({ params, request }) => {
         return redirect("/chat/" + params.id);
     }
 
+    socket.emit("message", { chat_id: params.id, user: username, message: message, date: new Date() });
     const newMessage = await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, username, message, new Date()]);
 
     if(newMessage){
