@@ -13,7 +13,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import Sidebar from "~/components/sidebar";
+import Sidebar from "~/components/Sidebar";
 import { getSession } from "~/services/session";
 
 export const links: LinksFunction = () => [
