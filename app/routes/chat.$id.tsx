@@ -64,8 +64,6 @@ export default function Chat() {
     const {chat, user} = useLoaderData();
     const revalidator = useRevalidator();
 
-    console.log(chat, user);
-
     const fetcher = useFetcher();
     let textRef = useRef();
     let chatRef = useRef();
