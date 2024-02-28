@@ -1,8 +1,14 @@
 import moment from "moment";
-export default function MessageContainer({ messages, ref }){
-    console.log(messages);
+import { useEffect, useRef } from "react";
+export default function MessageContainer({ messages }){
+
+    const chatRef = useRef();
+    useEffect(() => {
+        chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }, [messages]);
+
     return (
-        <div ref={ref} className="messages-container">
+        <div ref={chatRef} className="messages-container">
             {messages.map((message, i) => {
                 // Calculate the difference in seconds between the current message's date and the previous message's date
                 const secondsDiff = i > 0 ? moment(message.date).diff(moment(messages[i - 1].date), 'seconds') : 0;

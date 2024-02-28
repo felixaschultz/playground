@@ -56,14 +56,16 @@ export const loader = async ({ params, request }) => {
         message.you = message.user === signedInUser;
     });
 
-    const chatUser = chat.find(element => element.user !== signedInUser)?.user;
-    return { chat, chatUser };
+    const chatUser = chat.find(element => element.user !== signedInUser).user;
+    return { chat,  chatUser };
 }
 
 export default function Chat() {
     const {chat, user} = useLoaderData();
     const revalidator = useRevalidator();
-    
+
+    console.log(chat, user);
+
     const fetcher = useFetcher();
     let textRef = useRef();
     let chatRef = useRef();
@@ -91,8 +93,6 @@ export default function Chat() {
             return () => {
                 emitter.off("after_message_insert", handleNewMessage);
             }
-        }else{
-            console.log("No emitter");
         }
     }, []); // Empty dependency array
 
