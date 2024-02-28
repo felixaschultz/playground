@@ -1,6 +1,7 @@
 import { useLoaderData, useFetcher, Form, redirect, useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { getSession } from "~/services/session";
+import { useRevalidator } from "@remix-run/react";
 
 import moment from "moment";
 import { con } from "~/db/database";
@@ -28,10 +29,16 @@ export const loader = async ({ params, request }) => {
     const id = params.id;
 
     let [chat] = await con.query("SELECT * FROM messages WHERE chat_id = ?", [id]);
+
+    if(!chat){
+        return new Response("Chat not found", {status: 404});
+    }
+
     chat = chat.map((message) => {
         message.date = moment(message.date).format("YYYY-MM-DD HH:mm:ss");
         return message;
     });
+
     chat.forEach((message) => {
         /* Find user */
         (message.message.match(/@(\w+)/g) || []).forEach((match) => {
@@ -54,7 +61,8 @@ export const loader = async ({ params, request }) => {
 
 export default function Chat() {
     const {chat, user} = useLoaderData();
-
+    const revalidator = useRevalidator();
+    
     const fetcher = useFetcher();
     let textRef = useRef();
     let chatRef = useRef();
@@ -70,6 +78,22 @@ export default function Chat() {
         }
 
     }, [fetcher.state]);
+
+    /* useEffect(() => {
+        const handleNewMessage = (data) => {
+            console.log(data);
+            revalidator.revalidate();
+        };
+    
+        if( emitter ){
+            emitter.on("after_message_insert", handleNewMessage);
+            return () => {
+                emitter.off("after_message_insert", handleNewMessage);
+            }
+        }else{
+            console.log("No emitter");
+        }
+    }, []);  */// Empty dependency array
 
     return (
         <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
@@ -123,9 +147,9 @@ export const action = async ({ params, request }) => {
         return redirect("/chat/" + params.id);
     }
 
-    return await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, username, message, new Date()]);
+    const newMessage = await con.query("INSERT INTO messages (chat_id, user, message, date) VALUES (?, ?, ?, ?)", [params.id, username, message, new Date()]);
 
-    /* if(newMessage){
-        return eventEmitter.emit("after_message_insert", { chat_id: params.id, user: username, message: message, date: new Date() });
-    } */
+    if(newMessage){
+        return emitter.emit("after_message_insert", { chat_id: params.id, user: username, message: message, date: new Date() });
+    }
 }
