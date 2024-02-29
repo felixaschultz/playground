@@ -5,7 +5,7 @@ export default function MessageContainer({ messages }){
     const chatRef = useRef();
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }, [messages]);
+    }, []);
 
     return (
         <div ref={chatRef} className="messages-container">

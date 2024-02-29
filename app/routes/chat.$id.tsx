@@ -81,6 +81,7 @@ export default function Chat() {
     const {chat, user} = useLoaderData();
 
     const fetcher = useFetcher();
+    const revalidate = useRevalidator();
     let textRef = useRef();
     let chatRef = useRef();
 
@@ -91,10 +92,16 @@ export default function Chat() {
         }
 
         if(fetcher.state === "done" && chatRef.current){
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+            /* chatRef.current.scrollTop = chatRef.current.scrollHeight; */
         }
 
     }, [fetcher.state]);
+
+    useEffect(() => {
+        setInterval(() => {
+            revalidate.revalidate();
+        }, 1000);
+    }, []);
 
     return (
         <div className="chatContainer-grid" style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
