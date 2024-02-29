@@ -14,7 +14,7 @@ export function loader() {
 }
 
 export default function Index() {
-  useEffect(() => {
+  /* useEffect(() => {
     const socket = io("http://localhost:3000");
     socket.on("connect", () => {
       console.log("Connected to server");
@@ -25,7 +25,7 @@ export default function Index() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, []); */
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
         <h1>Remix Chat</h1>
